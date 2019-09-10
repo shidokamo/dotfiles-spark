@@ -8,7 +8,9 @@ config:config-master
 config-master:
 	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
 	cp config/* ${SPARK_HOME}/conf/
-config-worker:
+workers:${WORKERS}
+${WORKERS}:
+	./create-vm.sh $@
 
 # Install
 install:install-jdk install-spark
