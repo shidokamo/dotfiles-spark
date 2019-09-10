@@ -1,10 +1,14 @@
 SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
+WORKERS       := w0 w1
 
 # Update config
 .PHONY:config
-config:
+config:config-master
+config-master:
+	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
 	cp config/* ${SPARK_HOME}/conf/
+config-worker:
 
 # Install
 install:install-jdk install-spark
