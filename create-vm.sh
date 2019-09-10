@@ -12,7 +12,7 @@ SERVICE_ACCOUNT=${SERVICE_ACCOUNT:-owner-service@${PROJECT}.iam.gserviceaccount.
 SPARK_VERSION=${SPARK_VERSION:-spark-2.4.4}
 SPARK_HOME=${SPARK_HOME:-/opt/spark}
 
-START_UP_SCRIPT="
+STARTUP_SCRIPT="
   #!/bin/sh
   ## System
   apt-get update
