@@ -1,6 +1,11 @@
 SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
 
+# Update config
+.PHONY:config
+config:
+	cp config/* ${SPARK_HOME}/conf/
+
 # Install
 install:install-jdk install-spark
 install-jdk:

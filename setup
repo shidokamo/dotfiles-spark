@@ -1,8 +1,0 @@
-#!/bin/bash
-SPARK_HOME="/opt/spark"
-
-# Setup config
-cp spark/stand-alone/* ${SPARK_HOME}/conf/
-
-# Run master
-${SPARK_HOME}/sbin/start-master.sh
