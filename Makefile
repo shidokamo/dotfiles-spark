@@ -14,7 +14,8 @@ ${WORKERS}:
 # Update config
 config-master:
 	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
-	# echo "localhost" >> ${SPARK_HOME}/conf/slave
+	echo "localhost" >> ${SPARK_HOME}/conf/slave
+	ssh ${USER}@localhost echo "Login test" || cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 	cp conf/* ${SPARK_HOME}/conf/
 config-slave:
 	# Copy config files to workers
