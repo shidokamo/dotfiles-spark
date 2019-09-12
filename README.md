@@ -1,17 +1,17 @@
 # Dotfiles : Spark
 Spark のクラスタを運用するための設定ファイルです。
 
-# Install
+# Install Spark to local VM as master
 ```
 sudo make install
 ```
 
-# 設定の更新
+# Create worker VMs and install spark
 ```
-sudo make config
+make worksers
 ```
 
 # クラスタの実行
 ```
-sudo make run
+sudo make start-cluster
 ```

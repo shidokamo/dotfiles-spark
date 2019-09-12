@@ -13,7 +13,8 @@ ${WORKERS}:
 # Update config
 config-master:
 	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
-	cp config/* ${SPARK_HOME}/conf/
+	echo "localhost" >> ${SPARK_HOME}/conf/slave
+	cp conf/* ${SPARK_HOME}/conf/
 config-slave:
 	# Copy config files to workers
 	for i in ${WORKERS}; do gcloud compute scp --recurse conf $$i:${SPARK_HOME}; done
