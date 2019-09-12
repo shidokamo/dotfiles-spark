@@ -12,35 +12,7 @@ SERVICE_ACCOUNT=${SERVICE_ACCOUNT:-owner-service@${PROJECT}.iam.gserviceaccount.
 SPARK_VERSION=${SPARK_VERSION:-spark-2.4.4}
 SPARK_HOME=${SPARK_HOME:-/opt/spark}
 
-STARTUP_SCRIPT="
-#!/bin/sh
-echo '----- Update system -----'
-apt-get update
-apt-get -y upgrade
-
-echo '----- Setup NTP ----'
-cat <<EOF > /etc/systemd/timesyncd.conf
-[Time]
-NTP=metadata.google.internal
-EOF
-systemctl daemon-reload
-systemctl enable systemd-timesyncd
-systemctl start systemd-timesyncd
-
-echo '----- Install Java -----'
-apt-get install -y openjdk-8-jdk
-
-echo '----- Install Spark -----'
-wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
-tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
-rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
-mkdir -p ${SPARK_HOME}
-mv ${SPARK_VERSION}-bin-hadoop2.7/* ${SPARK_HOME}/*
-
-# Change owner and add full access
-chown ${USER} -R ${SPARK_HOME}
-chmod 755 -R ${SPARK_HOME}
-"
+STARTUP_SCRIPT=${STARTUP_SCRIPT:-startup-script.sh}
 
 gcloud compute instances create \
   ${INSTANCE_NAME} \
@@ -50,9 +22,6 @@ gcloud compute instances create \
   --image-family ${IMAGE_FAMILY} \
   --boot-disk-size ${DISK_SIZE} \
   --boot-disk-type ${DISK_TYPE} \
-  --metadata startup-script="
-${STARTUP_SCRIPT}
-"
+  --metadata-from-file startup-script=${STARTUP_SCRIPT}
 
-#  --metadata startup-script="${STARTUP_SCRIPT}"
 
