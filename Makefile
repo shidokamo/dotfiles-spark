@@ -23,7 +23,7 @@ check-worker-log:
 gen_conf:
 	echo "SPARK_MASTER_HOST=$(shell hostname)" > conf/spark-env.sh
 config-master:gen_conf
-	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slave
+	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slaves
 	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
 	ssh ${USER}@localhost echo "Login test" || cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 	cp conf/* ${SPARK_HOME}/conf/
