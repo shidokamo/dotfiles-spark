@@ -42,7 +42,7 @@
 
 # Options for the daemons used in the standalone deploy mode
 SPARK_MASTER_HOST=ms
-SPARK_MASTER_PORT=7070
+SPARK_MASTER_PORT=7077
 # - SPARK_MASTER_OPTS, to set config properties only for the master (e.g. "-Dx=y")
 # - SPARK_WORKER_CORES, to set the number of cores to use on this machine
 # - SPARK_WORKER_MEMORY, to set how much total memory workers have to give executors (e.g. 1000m, 2g)

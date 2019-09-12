@@ -29,6 +29,13 @@ stop-cluster:
 	-${SPARK_HOME}/sbin/stop-slaves.sh
 	-${SPARK_HOME}/sbin/stop-master.sh
 
+# Simple test
+test:
+	# cd ${SPARK_HOME} && ./bin/pyspark
+	${SPARK_HOME}/bin/spark-submit \
+		--master spark://localhost:7077 \
+		${SPARK_HOME}/examples/src/main/python/pi.py 1000
+
 # Install Spark to master
 install:
 	sudo -E ${STARTUP_SCRIPT}
