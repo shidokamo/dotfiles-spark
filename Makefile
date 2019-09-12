@@ -1,6 +1,7 @@
 SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
 STARTUP_SCRIPT := $(abspath ./startup-script.sh)
+SPARK_USER    := ${USER}
 export
 WORKERS       := w0
 
@@ -26,4 +27,6 @@ start-cluster:config-slave config-master
 
 # Install Spark to master
 install:
-	${STARTUP_SCRIPT}
+	sudo -E ${STARTUP_SCRIPT}
+uninstall:
+	-sudo rm -rf ${SPARK_HOME}
