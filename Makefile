@@ -2,7 +2,7 @@ SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
 STARTUP_SCRIPT := $(abspath ./startup-script.sh)
 export
-WORKERS       := w0 w1 w2
+WORKERS       := w0
 
 # Create VMs (assuming that key file already exists)
 workers:${WORKERS}
