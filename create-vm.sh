@@ -13,24 +13,23 @@ SPARK_VERSION=${SPARK_VERSION:-spark-2.4.4}
 SPARK_HOME=${SPARK_HOME:-/opt/spark}
 
 STARTUP_SCRIPT="
-  #!/bin/sh
-  ## System
+  echo '----- Update system -----'
   apt-get update
   apt-get -y upgrade
 
-  ## NTP
+  echo '----- Setup NTP ----'
   cat <<EOF > /etc/systemd/timesyncd.conf
   [Time]
   NTP=metadata.google.internal
-  EOF
+EOF
   systemctl daemon-reload
   systemctl enable systemd-timesyncd
   systemctl start systemd-timesyncd
 
-  ## Java
+  echo '----- Install Java -----'
   apt-get install -y openjdk-8-jdk
 
-  ## Spark
+  echo '----- Install Spark -----'
   wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
   tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
   rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
@@ -50,5 +49,9 @@ gcloud compute instances create \
   --image-family ${IMAGE_FAMILY} \
   --boot-disk-size ${DISK_SIZE} \
   --boot-disk-type ${DISK_TYPE} \
-  --metadata startup-script="${STARTUP_SCRIPT}"
+  --metadata startup-script="
+${STARTUP_SCRIPT}
+"
+
+#  --metadata startup-script="${STARTUP_SCRIPT}"
 
