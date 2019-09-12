@@ -20,12 +20,14 @@ check-worker-log:
 	for i in ${WORKERS}; do echo "----- $$i -----"; gcloud compute ssh $$i --command="grep 'startup-script.*Return code' /var/log/syslog"; done
 
 # Update config
-config-master:
+gen_conf:
+	echo "SPARK_MASTER_HOST=$(shell hostname)" > conf/spark-env.sh
+config-master:gen_conf
 	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slave
 	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
 	ssh ${USER}@localhost echo "Login test" || cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 	cp conf/* ${SPARK_HOME}/conf/
-config-slave:
+config-slave:gen_conf
 	# Copy config files to workers
 	for i in ${WORKERS}; do gcloud compute scp --recurse conf $$i:${SPARK_HOME}; done
 
