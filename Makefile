@@ -21,8 +21,8 @@ check-worker-log:
 
 # Update config
 config-master:
-	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
-	echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
+	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slave
+	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
 	ssh ${USER}@localhost echo "Login test" || cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 	cp conf/* ${SPARK_HOME}/conf/
 config-slave:
