@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ -e ~/SPARK_INSTALLED ];
+if [ -e ~/SPARK_INSTALLED ]; then
   echo "SPARK is already installed."
   exit
 fi
@@ -25,7 +25,7 @@ wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoo
 tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
 rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
 mkdir -p ${SPARK_HOME}
-mv ${SPARK_VERSION}-bin-hadoop2.7/* ${SPARK_HOME}/*
+mv ${SPARK_VERSION}-bin-hadoop2.7/* ${SPARK_HOME}/
 
 # Change owner and add full access
 chown ${USER} -R ${SPARK_HOME}

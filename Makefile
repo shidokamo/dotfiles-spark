@@ -23,14 +23,6 @@ start-cluster:config-slave config-master
 	${SPARK_HOME}/bin/start-master.sh
 	${SPARK_HOME}/bin/start-slave.sh
 
-# Install
-install:install-jdk install-spark
-install-jdk:
-	apt-get install -y openjdk-8-jdk
-install-spark:
-	wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
-	tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
-	rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
-	mkdir -p /opt
-	mv ${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
-
+# Install Spark to master
+install:
+	${STARTUP_SCRIPT}
