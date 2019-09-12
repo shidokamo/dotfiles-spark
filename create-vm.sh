@@ -13,32 +13,33 @@ SPARK_VERSION=${SPARK_VERSION:-spark-2.4.4}
 SPARK_HOME=${SPARK_HOME:-/opt/spark}
 
 STARTUP_SCRIPT="
-  echo '----- Update system -----'
-  apt-get update
-  apt-get -y upgrade
+#!/bin/sh
+echo '----- Update system -----'
+apt-get update
+apt-get -y upgrade
 
-  echo '----- Setup NTP ----'
-  cat <<EOF > /etc/systemd/timesyncd.conf
-  [Time]
-  NTP=metadata.google.internal
+echo '----- Setup NTP ----'
+cat <<EOF > /etc/systemd/timesyncd.conf
+[Time]
+NTP=metadata.google.internal
 EOF
-  systemctl daemon-reload
-  systemctl enable systemd-timesyncd
-  systemctl start systemd-timesyncd
+systemctl daemon-reload
+systemctl enable systemd-timesyncd
+systemctl start systemd-timesyncd
 
-  echo '----- Install Java -----'
-  apt-get install -y openjdk-8-jdk
+echo '----- Install Java -----'
+apt-get install -y openjdk-8-jdk
 
-  echo '----- Install Spark -----'
-  wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
-  tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
-  rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
-  mkdir -p /opt
-  mv ${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
+echo '----- Install Spark -----'
+wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
+tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
+rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
+mkdir -p /opt
+mv ${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
 
-  # Change owner and add full access
-  chown ${USER} -R /opt/spark
-  chmod 755 -R /opt/spark
+# Change owner and add full access
+chown ${USER} -R /opt/spark
+chmod 755 -R /opt/spark
 "
 
 gcloud compute instances create \
