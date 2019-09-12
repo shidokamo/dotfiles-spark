@@ -14,6 +14,9 @@ SPARK_HOME=${SPARK_HOME:-/opt/spark}
 
 STARTUP_SCRIPT=${STARTUP_SCRIPT:-startup-script.sh}
 
+# This is required since we can't path environment variable to VM
+STARTUP_SCRIPT=$(cat ${STARTUP_SCRIPT} | envsubst)
+
 gcloud compute instances create \
   ${INSTANCE_NAME} \
   --machine-type ${MACHINE} \
@@ -22,6 +25,5 @@ gcloud compute instances create \
   --image-family ${IMAGE_FAMILY} \
   --boot-disk-size ${DISK_SIZE} \
   --boot-disk-type ${DISK_TYPE} \
-  --metadata-from-file startup-script=${STARTUP_SCRIPT}
-
+  --metadata startup-script="${STARTUP_SCRIPT}"
 
