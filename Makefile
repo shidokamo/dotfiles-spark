@@ -14,16 +14,19 @@ ${WORKERS}:
 # Update config
 config-master:
 	echo ${WORKERS} | sed 's/\s\+/\n/' > ${SPARK_HOME}/conf/slave
-	echo "localhost" >> ${SPARK_HOME}/conf/slave
+	# echo "localhost" >> ${SPARK_HOME}/conf/slave
 	cp conf/* ${SPARK_HOME}/conf/
 config-slave:
 	# Copy config files to workers
 	for i in ${WORKERS}; do gcloud compute scp --recurse conf $$i:${SPARK_HOME}; done
 
 # Run clusterj
-start-cluster:config-slave config-master
-	${SPARK_HOME}/bin/start-master.sh
-	${SPARK_HOME}/bin/start-slave.sh
+start-cluster:stop-cluster config-slave config-master
+	${SPARK_HOME}/sbin/start-master.sh
+	${SPARK_HOME}/sbin/start-slaves.sh
+stop-cluster:
+	-${SPARK_HOME}/sbin/stop-slaves.sh
+	-${SPARK_HOME}/sbin/stop-master.sh
 
 # Install Spark to master
 install:
