@@ -21,6 +21,7 @@ echo '----- Install Java -----'
 apt-get install -y openjdk-8-jdk
 
 echo '----- Install Spark -----'
+cd /tmp
 wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
 tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
 rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
