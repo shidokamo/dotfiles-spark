@@ -1,5 +1,5 @@
 #!/bin/sh
-if [ -e ~/SPARK_INSTALLED ]; then
+if [ -e SPARK_INSTALLED ]; then
   echo "SPARK is already installed."
   exit
 fi
@@ -33,4 +33,4 @@ chown ${USER} -R ${SPARK_HOME}
 chmod 755 -R ${SPARK_HOME}
 
 # Prevent next execution
-touch ~/SPARK_INSTALLED
+echo "This is a flag file to prevent repeated installation." > SPARK_INSTALLED
