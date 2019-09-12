@@ -22,6 +22,8 @@ check-worker-log:
 # Update config
 gen_conf:
 	echo "SPARK_MASTER_HOST=$(shell hostname)" > conf/spark-env.sh
+	echo "SPARK_WORKER_MEMORY=6g" >> conf/spark-env.sh
+	echo "SPARK_EXECUTOR_MEMORY=3g" >> conf/spark-env.sh
 config-master:gen_conf
 	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slaves
 	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
@@ -50,4 +52,11 @@ test2:
 	${SPARK_HOME}/bin/spark-submit \
 		--class org.apache.spark.examples.SparkPi \
 		--master spark://`hostname`:7077 \
-		${SPARK_HOME}/examples/jars/spark-examples_2.11-2.4.4.jar 1000
+		${SPARK_HOME}/examples/jars/spark-examples_2.11-2.4.4.jar 100000
+
+test2-core1:
+	${SPARK_HOME}/bin/spark-submit \
+		--class org.apache.spark.examples.SparkPi \
+		--master spark://`hostname`:7077 \
+		--total-executor-cores 1 \
+		${SPARK_HOME}/examples/jars/spark-examples_2.11-2.4.4.jar 100000
