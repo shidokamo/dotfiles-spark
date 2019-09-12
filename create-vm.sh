@@ -34,12 +34,12 @@ echo '----- Install Spark -----'
 wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
 tar xvzf ${SPARK_VERSION}-bin-hadoop2.7.tgz
 rm ${SPARK_VERSION}-bin-hadoop2.7.tgz
-mkdir -p /opt
-mv ${SPARK_VERSION}-bin-hadoop2.7 ${SPARK_HOME}
+mkdir -p ${SPARK_HOME}
+mv ${SPARK_VERSION}-bin-hadoop2.7/* ${SPARK_HOME}/*
 
 # Change owner and add full access
-chown ${USER} -R /opt/spark
-chmod 755 -R /opt/spark
+chown ${USER} -R ${SPARK_HOME}
+chmod 755 -R ${SPARK_HOME}
 "
 
 gcloud compute instances create \
