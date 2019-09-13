@@ -2,6 +2,7 @@ SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
 STARTUP_SCRIPT := $(abspath ./startup-script.sh)
 SPARK_USER    := ${USER}
+MACHINE       := n1-standard-1
 export
 WORKERS       := w0 w1 w2
 
@@ -18,6 +19,8 @@ ${WORKERS}:
 	gcloud compute scp ~/.ssh/id_rsa.pub $@:~/.ssh/authorized_keys
 check-worker-log:
 	for i in ${WORKERS}; do echo "----- $$i -----"; gcloud compute ssh $$i --command="grep 'startup-script.*Return code' /var/log/syslog"; done
+delete-worker:
+	yes Y | gcloud compute instances delete ${WORKERS}
 
 # Update config
 gen_conf:
@@ -60,3 +63,9 @@ test2-core1:
 		--master spark://`hostname`:7077 \
 		--total-executor-cores 1 \
 		${SPARK_HOME}/examples/jars/spark-examples_2.11-2.4.4.jar 100000
+
+test3:
+	${SPARK_HOME}/bin/spark-submit \
+		--master spark://`hostname`:7077 \
+		src/word-count-tcp.py
+
