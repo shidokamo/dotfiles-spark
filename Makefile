@@ -2,6 +2,8 @@ SPARK_HOME    := /opt/spark
 SPARK_VERSION := spark-2.4.4
 STARTUP_SCRIPT := $(abspath ./startup-script.sh)
 SPARK_USER    := ${USER}
+SPARK_WORKER_MEMORY := 3g
+SPARK_EXECUTOR_MEMORY := 3g
 MACHINE       := n1-standard-1
 export
 WORKERS       := w0 w1 w2
@@ -21,12 +23,13 @@ check-worker-log:
 	for i in ${WORKERS}; do echo "----- $$i -----"; gcloud compute ssh $$i --command="grep 'startup-script.*Return code' /var/log/syslog"; done
 delete-worker:
 	yes Y | gcloud compute instances delete ${WORKERS}
+	for i in ${WORKERS}; do ssh-keygen -f "/home/shidokamo/.ssh/known_hosts" -R "$$i"; done
 
 # Update config
 gen_conf:
 	echo "SPARK_MASTER_HOST=$(shell hostname)" > conf/spark-env.sh
-	echo "SPARK_WORKER_MEMORY=6g" >> conf/spark-env.sh
-	echo "SPARK_EXECUTOR_MEMORY=3g" >> conf/spark-env.sh
+	echo "SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY}" >> conf/spark-env.sh
+	echo "SPARK_EXECUTOR_MEMORY=${SPARK_EXECUTOR_MEMORY}" >> conf/spark-env.sh
 config-master:gen_conf
 	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slaves
 	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave
