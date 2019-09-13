@@ -21,9 +21,10 @@ ${WORKERS}:
 	gcloud compute scp ~/.ssh/id_rsa.pub $@:~/.ssh/authorized_keys
 check-worker-log:
 	for i in ${WORKERS}; do echo "----- $$i -----"; gcloud compute ssh $$i --command="grep 'startup-script.*Return code' /var/log/syslog"; done
-delete-worker:
-	yes Y | gcloud compute instances delete ${WORKERS}
+delete-known-host:
 	for i in ${WORKERS}; do ssh-keygen -f "/home/shidokamo/.ssh/known_hosts" -R "$$i"; done
+delete-worker:delete-known-host
+	yes Y | gcloud compute instances delete ${WORKERS}
 
 # Update config
 gen_conf:
