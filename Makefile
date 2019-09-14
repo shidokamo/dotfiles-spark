@@ -6,6 +6,7 @@ SPARK_WORKER_MEMORY := 3g
 SPARK_EXECUTOR_MEMORY := 3g
 PYSPARK_PYTHON := /usr/bin/python3
 PYSPARK_DRIVER_PYTHON := /usr/bin/python3
+KAFKA_ENDPOINT := 172.16.130.5:31090
 MACHINE       := n1-standard-1
 export
 WORKERS       := w0 w1 w2
@@ -75,5 +76,5 @@ test2-core1:
 test3:
 	${SPARK_HOME}/bin/spark-submit \
 		--master spark://`hostname`:7077 \
-		src/word-count-tcp.py localhost 9999
-
+		--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.4 \
+		src/wc.py ${KAFKA_ENDPOINT}
