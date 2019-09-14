@@ -4,6 +4,8 @@ STARTUP_SCRIPT := $(abspath ./startup-script.sh)
 SPARK_USER    := ${USER}
 SPARK_WORKER_MEMORY := 3g
 SPARK_EXECUTOR_MEMORY := 3g
+PYSPARK_PYTHON := /usr/bin/python3
+PYSPARK_DRIVER_PYTHON := /usr/bin/python3
 MACHINE       := n1-standard-1
 export
 WORKERS       := w0 w1 w2
@@ -31,6 +33,8 @@ gen_conf:
 	echo "SPARK_MASTER_HOST=$(shell hostname)" > conf/spark-env.sh
 	echo "SPARK_WORKER_MEMORY=${SPARK_WORKER_MEMORY}" >> conf/spark-env.sh
 	echo "SPARK_EXECUTOR_MEMORY=${SPARK_EXECUTOR_MEMORY}" >> conf/spark-env.sh
+	echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> conf/spark-env.sh
+	echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_DRIVER_PYTHON}" >> conf/spark-env.sh
 config-master:gen_conf
 	echo ${WORKERS} | sed 's/\s\+/\n/g' > ${SPARK_HOME}/conf/slaves
 	#echo $(shell hostname) >> ${SPARK_HOME}/conf/slave

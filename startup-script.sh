@@ -20,6 +20,14 @@ systemctl start systemd-timesyncd
 echo '----- Install Java -----'
 apt-get install -y openjdk-8-jdk
 
+echo '----- Install Python -----'
+apt-get install -y python3-pip python3-dev
+apt-get install -y python-pip python-dev
+## Use the latest PIP
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py
+python3 -m pip install pyspark
+
 echo '----- Install Spark -----'
 cd /tmp
 wget http://apache.cs.utah.edu/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop2.7.tgz
