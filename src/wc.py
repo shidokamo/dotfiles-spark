@@ -5,14 +5,15 @@ from pyspark.sql.functions import split
 
 server = sys.argv[1]
 subscription = "subscribe"
-topics = "word"
+in_topics = "word"
+out_topics = "wc"
 
 spark = SparkSession.builder.appName("wc").getOrCreate()
 lines = spark.\
         readStream.\
         format("kafka").\
         option("kafka.bootstrap.servers", server).\
-        option(subscription, topics).\
+        option(subscription, in_topics).\
         load().\
         selectExpr("CAST(value AS STRING)")
 
@@ -23,5 +24,16 @@ words = lines.\
             ).alias('word')
         )
 wordCounts = words.groupBy('word').count()
-query = wordCounts.writeStream.outputMode('complete').format('console').start()
+# Write data to a specific Kafka topic specified in an option
+# Checkpoint must be specified.
+query = wordCounts\
+          .selectExpr("to_json(struct(*)) AS value")\
+          .writeStream\
+          .outputMode('complete')\
+          .format('kafka')\
+          .option("kafka.bootstrap.servers", server)\
+          .option("topic", out_topics)\
+          .option("checkpointLocation", "/opt/spark/state")\
+          .start()
+
 query.awaitTermination()
